@@ -11,7 +11,26 @@
     <%
         HistoryDao historyDao = new HistoryDao();
         List<HistoryDto> historyList = historyDao.selectHistory();
+
+        String historyId = request.getParameter("id");
+        boolean isClickHistoryDeleteButton = historyId == null;
+
+        boolean isDeleted = false;
+        if (isClickHistoryDeleteButton == false) {
+            isDeleted = historyDao.deleteHistoryId(Integer.parseInt(historyId));
+        }
     %>
+    <script>
+        const deleteHistory = (id) => {
+            const url = "history.jsp?id=" + id;
+            window.location.assign(url);
+        }
+
+        if (<%=isDeleted%>) {
+            alert(<%=historyId%> + "번이 정상적으로 삭제되었습니다.");
+            window.location.assign("history.jsp");
+        }
+    </script>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -42,7 +61,7 @@
                     <td><%=historyDto.getLongitude()%></td>
                     <td><%=historyDto.getLatitude()%></td>
                     <td><%=historyDto.getCheckDatetime()%></td>
-                    <td class="td-center"><button>삭제</button></td>
+                    <td class="td-center"><button onclick="deleteHistory(<%=historyDto.getId()%>)">삭제</button></td>
                 </tr>
             <% } %>
         <% } %>

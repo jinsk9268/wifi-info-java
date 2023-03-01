@@ -96,4 +96,40 @@ public class HistoryDao extends SQLiteDbConnection {
 
         return historyList;
     }
+
+    public boolean deleteHistoryId(int id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isDeleted = false;
+
+        final String sql = " DELETE FROM history WHERE id = ?; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, id);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            isDeleted = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            closeDbConnection();
+        }
+
+        return isDeleted;
+    }
 }
