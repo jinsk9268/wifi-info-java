@@ -1,3 +1,6 @@
+<%@ page import="com.zerobase.wifi.dao.HistoryDao" %>
+<%@ page import="com.zerobase.wifi.dto.HistoryDto" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,6 +8,10 @@
     <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        HistoryDao historyDao = new HistoryDao();
+        List<HistoryDto> historyList = historyDao.selectHistory();
+    %>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -24,16 +31,21 @@
             </tr>
         </thead>
         <tbody>
-        <tr>
-            <td class="td-require-data" colspan=5>데이터가 존재하지 않습니다.</td>
-        </tr>
+        <% if (historyList.size() == 0) { %>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="td-center"><button>삭제</button></td>
+                <td class="td-require-data" colspan=5>데이터가 존재하지 않습니다.</td>
             </tr>
+        <% } else { %>
+            <% for (HistoryDto historyDto: historyList) { %>
+                <tr>
+                    <td><%=historyDto.getId()%></td>
+                    <td><%=historyDto.getLongitude()%></td>
+                    <td><%=historyDto.getLatitude()%></td>
+                    <td><%=historyDto.getCheckDatetime()%></td>
+                    <td class="td-center"><button>삭제</button></td>
+                </tr>
+            <% } %>
+        <% } %>
         </tbody>
     </table>
 </body>

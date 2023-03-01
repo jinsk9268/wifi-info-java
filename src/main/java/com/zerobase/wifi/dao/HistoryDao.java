@@ -1,12 +1,15 @@
 package com.zerobase.wifi.dao;
 
 import com.zerobase.wifi.db.SQLiteDbConnection;
-import com.zerobase.wifi.dto.PublicWifiDto;
+import com.zerobase.wifi.dto.HistoryDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryDao extends SQLiteDbConnection {
     public void insertHistory(double latitude, double longitude) {
@@ -45,5 +48,52 @@ public class HistoryDao extends SQLiteDbConnection {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<HistoryDto> selectHistory() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        List<HistoryDto> historyList = new ArrayList<>();
+        final String sql = " SELECT * FROM history ORDER BY id DESC; ";
+
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                HistoryDto historyDto = new HistoryDto();
+                historyDto.setId(resultSet.getInt("id"));
+                historyDto.setLongitude(resultSet.getDouble("longitude"));
+                historyDto.setLatitude(resultSet.getDouble("latitude"));
+                historyDto.setCheckDatetime(resultSet.getString("check_datetime"));
+
+                historyList.add(historyDto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return historyList;
     }
 }
