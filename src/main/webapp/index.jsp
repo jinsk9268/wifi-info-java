@@ -3,41 +3,7 @@
 <html>
 <head>
     <title>와이파이 정보 구하기</title>
-    <style>
-        nav {
-            padding-bottom: 20px;
-        }
-
-        section {
-            padding: 20px 0 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        th {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .td-require-location-data {
-            padding : 20px;
-            text-align: center;
-        }
-    </style>
+    <link href="style/common.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
     <h1>와이파이 정보 구하기</h1>
