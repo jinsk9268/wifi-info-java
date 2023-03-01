@@ -195,6 +195,9 @@ public class PublicWifiDao extends SQLiteDbConnection {
 
                 nearWifiList.add(publicWifiDto);
             }
+
+            HistoryDao historyDao = new HistoryDao();
+            historyDao.insertHistory(latitude, longitude);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
