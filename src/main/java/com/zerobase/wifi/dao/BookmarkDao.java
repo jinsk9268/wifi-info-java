@@ -101,5 +101,91 @@ public class BookmarkDao extends SQLiteDbConnection {
         }
 
         return bookmarkGroupList;
-    } 
+    }
+
+    public BookmarkDto selectBookmarkGroupFromId(int id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        BookmarkDto bookmarkDto = new BookmarkDto();
+        final String sql = " SELECT bookmark_name, bookmark_order "
+                        + " FROM bookmark WHERE id = ?; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            bookmarkDto.setBookmarkName(resultSet.getString("bookmark_name"));
+            bookmarkDto.setBookmarkOrder(resultSet.getInt("bookmark_order"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return bookmarkDto;
+    }
+
+    public boolean updateBookmarkGroup(int id, String editName, int editOrder) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isBookmarkGroupUpdate = false;
+
+        final String sql = " UPDATE bookmark "
+                        + " SET bookmark_name = ?, bookmark_order = ?, modification_datetime = ? "
+                        + " WHERE id = ?; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, editName);
+            preparedStatement.setObject(2, editOrder);
+            preparedStatement.setObject(3, LocalDateTime.now());
+            preparedStatement.setObject(4, id);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+
+            isBookmarkGroupUpdate = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } finally {
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+
+                closeDbConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return isBookmarkGroupUpdate;
+    }
 }
