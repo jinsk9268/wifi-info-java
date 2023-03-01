@@ -6,6 +6,26 @@
     <link href="style/common.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <script>
+        let latitude;
+        let longitude;
+
+        const getLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getCoordinates);
+            } else {
+                alert("위치찾기를 지원하지 않습니다. 브라우저를 다시 확인하거나 위치 찾기 설정을 다시 확인해주세요")
+            }
+        };
+
+        const getCoordinates = (position) => {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+        }
+    </script>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -15,9 +35,9 @@
         <a href="bookmark-group.jsp">북마크 그룹 관리</a>
     </nav>
     <div>
-        LAT: <input/> ,
-        LNT: <input />
-        <button>내 위치 가져오기</button>
+        LAT: <input id="latitude" type="text" /> ,
+        LNT: <input id="longitude" type="text" />
+        <button onClick="getLocation()">내 위치 가져오기</button>
         <button>근처 WIFI 정보 보기</button>
     </div>
     <section>
