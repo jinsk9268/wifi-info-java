@@ -3,7 +3,7 @@ package com.zerobase.wifi.dto;
 public class BookmarkDto {
     private int id;
     private String bookmarkName;
-    private String bookmarkOrder;
+    private int bookmarkOrder;
     private String registerDatetime;
     private String modificationDatetime;
 
@@ -23,11 +23,11 @@ public class BookmarkDto {
         this.bookmarkName = bookmarkName;
     }
 
-    public String getBookmarkOrder() {
+    public int getBookmarkOrder() {
         return bookmarkOrder;
     }
 
-    public void setBookmarkOrder(String bookmarkOrder) {
+    public void setBookmarkOrder(int bookmarkOrder) {
         this.bookmarkOrder = bookmarkOrder;
     }
 
