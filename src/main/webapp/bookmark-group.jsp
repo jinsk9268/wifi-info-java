@@ -6,6 +6,11 @@
 </head>
 </head>
 <body>
+    <script>
+        const goToBookmarkGroupAdd = () => {
+            window.location.assign("bookmark-group-add.jsp")
+        }
+    </script>
     <h1>북마크 그룹 추가</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -15,7 +20,7 @@
         <a href="bookmark-group.jsp">북마크 그룹 관리</a>
     </nav>
     <section>
-        <button class="add-margin-bottom">북마크 그룹 이름 추가</button>
+        <button class="add-margin-bottom" onclick="goToBookmarkGroupAdd()">북마크 그룹 이름 추가</button>
         <table>
             <thead>
             <tr>
