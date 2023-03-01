@@ -23,8 +23,8 @@
         }
     %>
     <script>
-        let latitude = 0;
-        let longitude = 0;
+        let latitude;
+        let longitude;
 
         const getLocation = () => {
             if (navigator.geolocation) {
@@ -42,6 +42,10 @@
         }
 
         const getSelectNearWifiList = () => {
+            if (latitude === undefined || longitude === undefined) {
+                latitude = <%=lat%> === null ? 0 : <%=lat%>;
+                longitude = <%=lnt%> === null ? 0 : <%=lnt%>;
+            }
             const url = "?lat="+latitude+"&lnt="+longitude;
             window.location.assign(url);
         }
