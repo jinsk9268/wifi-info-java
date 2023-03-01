@@ -55,7 +55,7 @@
                             <%=bookmarkDto.getModificationDatetime() == null ? "" : bookmarkDto.getModificationDatetime()%>
                         </td>
                         <td class="td-center">
-                            <a>수정</a>
+                            <a href="bookmark-group-edit.jsp?id=<%=bookmarkDto.getId()%>">수정</a>
                             <a>삭제</a>
                         </td>
                     </tr>
