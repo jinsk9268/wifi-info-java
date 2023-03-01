@@ -1,3 +1,4 @@
+<%@ page import="com.zerobase.wifi.dao.BookmarkDao" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,6 +6,35 @@
     <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        String bookmarkName = request.getParameter("name");
+        String bookmarkOrder = request.getParameter("order");
+        boolean isClickAddButton = bookmarkName == null || bookmarkName.equals("");
+
+        BookmarkDao bookmarkDao = new BookmarkDao();
+        boolean isAddBookmarkGroup = false;
+        if (!isClickAddButton) {
+            isAddBookmarkGroup = bookmarkDao.insertBookmarkGroup(bookmarkName, Integer.parseInt(bookmarkOrder));
+        }
+    %>
+    <script>
+        const onClickAdd = () => {
+            const bookmarkGroupName = document.getElementById("bookmarkGroupName").value;
+            const bookmarkGroupOrder = document.getElementById("bookmarkOrder").value;
+
+            if (bookmarkGroupName == "" || bookmarkGroupOrder == "") {
+                return alert("모든 데이터가 입력되었는지 다시 확인해주세요.");
+            }
+
+            const url = "bookmark-group-add.jsp?name=" + bookmarkGroupName + "&order=" + bookmarkGroupOrder;
+            window.location.assign(url);
+        }
+
+        if (<%=isAddBookmarkGroup%>) {
+            alert("북마크 구룹 추가에 성공했습니다.");
+            window.location.assign("bookmark-group.jsp");
+        }
+    </script>
     <h1>북마크 그룹 추가</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -30,7 +60,7 @@
             </tr>
             <tr>
                 <td class="td-require-data" colspan="2">
-                    <button>추가</button>
+                    <button onclick="onClickAdd()">추가</button>
                 </td>
             </tr>
             </tbody>
