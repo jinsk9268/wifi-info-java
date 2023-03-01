@@ -1,3 +1,7 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.zerobase.wifi.dto.PublicWifiDto" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.zerobase.wifi.dao.PublicWifiDao" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -6,6 +10,18 @@
     <link href="style/common.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        List<PublicWifiDto> nearWifiList = new ArrayList<>();
+
+        String lat = request.getParameter("lat");
+        String lnt = request.getParameter("lnt");
+        if (lat == null || lat.equals("")) {
+
+        } else {
+            PublicWifiDao publicWifiDao = new PublicWifiDao();
+            nearWifiList = publicWifiDao.selectNearWifi(Double.parseDouble(lat), Double.parseDouble(lnt));
+        }
+    %>
     <script>
         let latitude;
         let longitude;
@@ -21,9 +37,13 @@
         const getCoordinates = (position) => {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-
             document.getElementById("latitude").value = latitude;
             document.getElementById("longitude").value = longitude;
+        }
+
+        const getSelectNearWifiList = () => {
+            const url = "?lat="+latitude+"&lnt="+longitude;
+            window.location.assign(url);
         }
     </script>
     <h1>와이파이 정보 구하기</h1>
@@ -35,10 +55,10 @@
         <a href="bookmark-group.jsp">북마크 그룹 관리</a>
     </nav>
     <div>
-        LAT: <input id="latitude" type="text" /> ,
-        LNT: <input id="longitude" type="text" />
+        LAT: <input id="latitude" type="text" value="<%=lat == null ? 0.0 : lat%>"/> ,
+        LNT: <input id="longitude" type="text" value="<%=lnt == null ? 0.0 : lnt%>"/>
         <button onClick="getLocation()">내 위치 가져오기</button>
-        <button>근처 WIFI 정보 보기</button>
+        <button onclick="getSelectNearWifiList()">근처 WIFI 정보 보기</button>
     </div>
     <section>
         <table>
@@ -64,28 +84,33 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="td-require-location-data" colspan="17">위치 정보를 입력한 후에 조회해 주세요.</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <% if(nearWifiList.size() == 0) { %>
+                    <tr>
+                        <td class="td-require-location-data" colspan="17">위치 정보를 입력한 후에 조회해 주세요.</td>
+                    </tr>
+                <% } else { %>
+                    <% for (PublicWifiDto row: nearWifiList) { %>
+                        <tr>
+                            <td><%=row.getDistance()%></td>
+                            <td><%=row.getManageNo()%></td>
+                            <td><%=row.getBorough()%></td>
+                            <td><%=row.getWifiName()%></td>
+                            <td><%=row.getAddressDetail()%></td>
+                            <td><%=row.getAddressStreet()%></td>
+                            <td><%=row.getFloor()%></td>
+                            <td><%=row.getInstallType()%></td>
+                            <td><%=row.getInstallAgency()%></td>
+                            <td><%=row.getServiceText()%></td>
+                            <td><%=row.getNetType()%></td>
+                            <td><%=row.getInstallYear()%></td>
+                            <td><%=row.getInoutDoor()%></td>
+                            <td><%=row.getWifiConnectionEnv()%></td>
+                            <td><%=row.getLongitude()%></td>
+                            <td><%=row.getLatitude()%></td>
+                            <td><%=row.getWorkDatetime()%></td>
+                        </tr>
+                    <% }%>
+                <% } %>
             </tbody>
         </table>
     </section>
