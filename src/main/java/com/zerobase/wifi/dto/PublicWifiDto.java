@@ -1,6 +1,7 @@
 package com.zerobase.wifi.dto;
 
 public class PublicWifiDto {
+    private double distance;
     private String manageNo;
     private String borough;
     private String wifiName;
@@ -18,6 +19,14 @@ public class PublicWifiDto {
     private double latitude;
     private String workDatetime;
     private Integer idBookmark;
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
     public String getManageNo() {
         return manageNo;
