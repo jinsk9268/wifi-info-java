@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublicWifiDao extends SQLiteDbConnection {
@@ -145,5 +146,77 @@ public class PublicWifiDao extends SQLiteDbConnection {
         }
 
         return isTotalDataDelete;
+    }
+
+    public List<PublicWifiDto> selectNearWifi(double latitude, double longitude) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        List<PublicWifiDto> nearWifiList = new ArrayList<>();
+        final String sql = " SELECT round( "
+                + " 6371 * ACOS( "
+                + " COS(RADIANS(?)) "
+                + " * COS(RADIANS(pwi.latitude)) "
+                + " * COS(RADIANS(pwi.longitude) - RADIANS(?)) "
+                + " + SIN(RADIANS(?)) "
+                + " * SIN(RADIANS(pwi.latitude))), 4) AS distance, * "
+                + "FROM public_wifi_info pwi ORDER BY distance ASC LIMIT 20; ";
+
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            // 공식과 좌표 순서 다시 확인
+            preparedStatement.setDouble(1, longitude);
+            preparedStatement.setDouble(2, latitude);
+            preparedStatement.setDouble(3, longitude);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                PublicWifiDto publicWifiDto = new PublicWifiDto();
+                publicWifiDto.setDistance(resultSet.getDouble("distance"));
+                publicWifiDto.setManageNo(resultSet.getString("manage_no"));
+                publicWifiDto.setBorough(resultSet.getString("borough"));
+                publicWifiDto.setWifiName(resultSet.getString("wifi_name"));
+                publicWifiDto.setAddressStreet(resultSet.getString("address_street"));
+                publicWifiDto.setAddressDetail(resultSet.getString("address_detail"));
+                publicWifiDto.setFloor(resultSet.getString("floor"));
+                publicWifiDto.setInstallType(resultSet.getString("install_type"));
+                publicWifiDto.setInstallAgency(resultSet.getString("install_agency"));
+                publicWifiDto.setServiceText(resultSet.getString("service"));
+                publicWifiDto.setNetType(resultSet.getString("net_type"));
+                publicWifiDto.setInstallYear(resultSet.getString("install_year"));
+                publicWifiDto.setInoutDoor(resultSet.getString("inout_door"));
+                publicWifiDto.setWifiConnectionEnv(resultSet.getString("wifi_connection_env"));
+                publicWifiDto.setLongitude(resultSet.getDouble("longitude"));
+                publicWifiDto.setLatitude(resultSet.getDouble("latitude"));
+                publicWifiDto.setWorkDatetime(resultSet.getString("work_datetime"));
+
+                nearWifiList.add(publicWifiDto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return nearWifiList;
     }
 }
