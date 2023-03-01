@@ -23,8 +23,8 @@
         }
     %>
     <script>
-        let latitude;
-        let longitude;
+        let latitude = 0;
+        let longitude = 0;
 
         const getLocation = () => {
             if (navigator.geolocation) {
@@ -58,7 +58,7 @@
         LAT: <input id="latitude" type="text" value="<%=lat == null ? 0.0 : lat%>"/> ,
         LNT: <input id="longitude" type="text" value="<%=lnt == null ? 0.0 : lnt%>"/>
         <button onClick="getLocation()">내 위치 가져오기</button>
-        <button onclick="getSelectNearWifiList()">근처 WIFI 정보 보기</button>
+        <button onClick="getSelectNearWifiList()">근처 WIFI 정보 보기</button>
     </div>
     <section>
         <table>
