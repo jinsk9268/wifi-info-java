@@ -27,7 +27,11 @@ th, td {
     border: 1px solid #ddd;
 }
 
-.td-require-location-data {
+.td-require-data {
     padding : 20px;
+    text-align: center;
+}
+
+.td-center {
     text-align: center;
 }
