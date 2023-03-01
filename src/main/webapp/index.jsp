@@ -98,7 +98,11 @@
                             <td><%=row.getDistance()%></td>
                             <td><%=row.getManageNo()%></td>
                             <td><%=row.getBorough()%></td>
-                            <td><%=row.getWifiName()%></td>
+                            <td>
+                                <a href="wifi-detail.jsp?manage-no=<%=row.getManageNo()%>">
+                                    <%=row.getWifiName()%>
+                                </a>
+                            </td>
                             <td><%=row.getAddressDetail()%></td>
                             <td><%=row.getAddressStreet()%></td>
                             <td><%=row.getFloor()%></td>
