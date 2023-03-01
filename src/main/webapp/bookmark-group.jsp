@@ -12,10 +12,23 @@
     <%
         BookmarkDao bookmarkDao = new BookmarkDao();
         List<BookmarkDto> list = bookmarkDao.selectBookmarkGroup();
+
+        String deleteId = request.getParameter("delete-id");
+        boolean isClickDeleted = deleteId == null;
+
+        boolean isDeletedBookmarkGroup = false;
+        if (!isClickDeleted) {
+            isDeletedBookmarkGroup = bookmarkDao.deleteBookmarkGroupFromId(Integer.parseInt(deleteId));
+        }
     %>
     <script>
         const goToBookmarkGroupAdd = () => {
-            window.location.assign("bookmark-group-add.jsp")
+            window.location.assign("bookmark-group-add.jsp");
+        }
+
+        if (<%=isDeletedBookmarkGroup%>) {
+            alert("<%=deleteId%>번 북마크 삭제에 성공했습니다.");
+            window.location.assign("bookmark-group.jsp");
         }
     </script>
     <h1>북마크 그룹 추가</h1>
@@ -56,7 +69,7 @@
                         </td>
                         <td class="td-center">
                             <a href="bookmark-group-edit.jsp?id=<%=bookmarkDto.getId()%>">수정</a>
-                            <a>삭제</a>
+                            <a href="bookmark-group.jsp?delete-id=<%=bookmarkDto.getId()%>">삭제</a>
                         </td>
                     </tr>
                 <% } %>
