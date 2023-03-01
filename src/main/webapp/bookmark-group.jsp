@@ -1,3 +1,6 @@
+<%@ page import="com.zerobase.wifi.dao.BookmarkDao" %>
+<%@ page import="com.zerobase.wifi.dto.BookmarkDto" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -6,6 +9,10 @@
 </head>
 </head>
 <body>
+    <%
+        BookmarkDao bookmarkDao = new BookmarkDao();
+        List<BookmarkDto> list = bookmarkDao.selectBookmarkGroup();
+    %>
     <script>
         const goToBookmarkGroupAdd = () => {
             window.location.assign("bookmark-group-add.jsp")
@@ -26,25 +33,34 @@
             <tr>
                 <th>ID</th>
                 <th>북마크 이름</th>
+                <th>순서</th>
                 <th>등록일자</th>
                 <th>수정일자</th>
                 <th>비고</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="td-require-data" colspan=5>데이터가 존재하지 않습니다.</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="td-center">
-                    <a>수정</a>
-                    <a>삭제</a>
-                </td>
-            </tr>
+            <% if (list.size() == 0) { %>
+                <tr>
+                    <td class="td-require-data" colspan=6>데이터가 존재하지 않습니다.</td>
+                </tr>
+            <% } else { %>
+                <% for (BookmarkDto bookmarkDto: list) { %>
+                    <tr>
+                        <td><%=bookmarkDto.getId()%></td>
+                        <td><%=bookmarkDto.getBookmarkName()%></td>
+                        <td><%=bookmarkDto.getBookmarkOrder()%></td>
+                        <td><%=bookmarkDto.getRegisterDatetime()%></td>
+                        <td>
+                            <%=bookmarkDto.getModificationDatetime() == null ? "" : bookmarkDto.getModificationDatetime()%>
+                        </td>
+                        <td class="td-center">
+                            <a>수정</a>
+                            <a>삭제</a>
+                        </td>
+                    </tr>
+                <% } %>
+            <% } %>
             </tbody>
         </table>
     </section>
