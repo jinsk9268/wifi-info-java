@@ -1,6 +1,6 @@
 package com.zerobase.wifi.dto;
 
-public class Bookmark {
+public class BookmarkDto {
     private int id;
     private String bookmarkName;
     private String bookmarkOrder;
