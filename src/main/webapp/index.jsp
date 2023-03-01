@@ -15,9 +15,9 @@
 
         String lat = request.getParameter("lat");
         String lnt = request.getParameter("lnt");
-        if (lat == null || lat.equals("")) {
+        boolean isClickSelectNearWifiListButton = lat == null || lat.equals("");
 
-        } else {
+        if (!isClickSelectNearWifiListButton) {
             PublicWifiDao publicWifiDao = new PublicWifiDao();
             nearWifiList = publicWifiDao.selectNearWifi(Double.parseDouble(lat), Double.parseDouble(lnt));
         }

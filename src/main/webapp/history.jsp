@@ -16,7 +16,7 @@
         boolean isClickHistoryDeleteButton = historyId == null;
 
         boolean isDeleted = false;
-        if (isClickHistoryDeleteButton == false) {
+        if (!isClickHistoryDeleteButton) {
             isDeleted = historyDao.deleteHistoryId(Integer.parseInt(historyId));
         }
     %>
