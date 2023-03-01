@@ -39,3 +39,7 @@ th, td {
 .box-bookmark-select {
     padding-bottom: 20px;
 }
+
+.add-margin-bottom {
+    margin-bottom: 20px;
+}
