@@ -13,12 +13,37 @@
 <body>
     <%
         String manageNo = request.getParameter("manage-no");
+
         PublicWifiDao publicWifiDao = new PublicWifiDao();
         PublicWifiDto wifiDetail = publicWifiDao.selectWifiDetail(manageNo);
 
         BookmarkDao bookmarkDao = new BookmarkDao();
         List<BookmarkDto> bookmarkGroupList = bookmarkDao.selectBookmarkGroup();
+
+        String groupId = request.getParameter("group-id");
+        boolean isClickAddBookmarkIdButton = groupId == null;
+
+        boolean isAddBookmarkId = false;
+        if (!isClickAddBookmarkIdButton) {
+            isAddBookmarkId = publicWifiDao.updateWifiAddBookmarkGroup(manageNo, Integer.parseInt(groupId));
+        }
     %>
+    <script>
+        let selectBookmarkGroupId;
+        const onChangeUpdateIdBookmark = (target) => {
+            selectBookmarkGroupId = target.value;
+        }
+
+        const onClickAddBookmarkGroupId = () => {
+            const url = "wifi-detail.jsp?manage-no=<%=manageNo%>&group-id=" + selectBookmarkGroupId;
+            window.location.assign(url);
+        }
+
+        if (<%=isAddBookmarkId%>) {
+            alert("북마크 그룹 추가에 성공했습니다.");
+            window.location.assign("wifi-detail.jsp?manage-no=<%=manageNo%>");
+        }
+    </script>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -29,7 +54,7 @@
     </nav>
     <section>
         <div class="box-bookmark-select">
-            <select>
+            <select onchange="onChangeUpdateIdBookmark(this)">
                 <option value="none">북마크 그룹 이름 선택</option>
                 <% if (bookmarkGroupList.size() > 0) { %>
                     <% for (BookmarkDto group: bookmarkGroupList) { %>
@@ -37,7 +62,7 @@
                     <% } %>
                 <% } %>
             </select>
-            <button>북마크 추가하기</button>
+            <button onclick="onClickAddBookmarkGroupId()">북마크 추가하기</button>
         </div>
         <table>
             <colgroup>
