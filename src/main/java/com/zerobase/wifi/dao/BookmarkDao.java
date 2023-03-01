@@ -188,4 +188,40 @@ public class BookmarkDao extends SQLiteDbConnection {
 
         return isBookmarkGroupUpdate;
     }
+
+    public boolean deleteBookmarkGroupFromId(int deleteId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isDeleted = false;
+
+        final String sql = " DELETE from bookmark WHERE id = ?; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, deleteId);
+
+            preparedStatement.executeUpdate();
+            connection.commit();
+            isDeleted = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            closeDbConnection();
+        }
+
+        return isDeleted;
+    }
 }
