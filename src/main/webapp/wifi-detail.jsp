@@ -1,4 +1,5 @@
 <%@ page import="com.zerobase.wifi.dao.PublicWifiDao" %>
+<%@ page import="com.zerobase.wifi.dto.PublicWifiDto" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -7,6 +8,11 @@
     <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        String manageNo = request.getParameter("manage-no");
+        PublicWifiDao publicWifiDao = new PublicWifiDao();
+        PublicWifiDto wifiDetail = publicWifiDao.selectWifiDetail(manageNo);
+    %>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -30,71 +36,75 @@
             <tbody>
                 <tr>
                     <th>거리(Km)</th>
-                    <td></td>
+                    <td><%=wifiDetail.getDistance()%></td>
                 </tr>
                 <tr>
                     <th>관리번호</th>
-                    <td></td>
+                    <td><%=wifiDetail.getManageNo()%></td>
                 </tr>
                 <tr>
                     <th>자치구</th>
-                    <td></td>
+                    <td><%=wifiDetail.getBorough()%></td>
                 </tr>
                 <tr>
                     <th>와이파이명</th>
-                    <td></td>
+                    <td>
+                        <a href="wifi-detail.jsp?manage-no=<%=wifiDetail.getManageNo()%>">
+                            <%=wifiDetail.getWifiName()%>
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <th>도로명주소</th>
-                    <td></td>
+                    <td><%=wifiDetail.getAddressDetail()%></td>
                 </tr>
                 <tr>
                     <th>상세주소</th>
-                    <td></td>
+                    <td><%=wifiDetail.getAddressStreet()%></td>
                 </tr>
                 <tr>
                     <th>설치위치(층)</th>
-                    <td></td>
+                    <td><%=wifiDetail.getFloor()%></td>
                 </tr>
                 <tr>
                     <th>설치유형</th>
-                    <td></td>
+                    <td><%=wifiDetail.getInstallType()%></td>
                 </tr>
                 <tr>
                     <th>설치기관</th>
-                    <td></td>
+                    <td><%=wifiDetail.getInstallAgency()%></td>
                 </tr>
                 <tr>
                     <th>서비스구분</th>
-                    <td></td>
+                    <td><%=wifiDetail.getServiceText()%></td>
                 </tr>
                 <tr>
                     <th>망종류</th>
-                    <td></td>
+                    <td><%=wifiDetail.getNetType()%></td>
                 </tr>
                 <tr>
                     <th>설치년도</th>
-                    <td></td>
+                    <td><%=wifiDetail.getInstallYear()%></td>
                 </tr>
                 <tr>
                     <th>실내외구분</th>
-                    <td></td>
+                    <td><%=wifiDetail.getInoutDoor()%></td>
                 </tr>
                 <tr>
                     <th>WIFI접속환경</th>
-                    <td></td>
+                    <td><%=wifiDetail.getWifiConnectionEnv()%></td>
                 </tr>
                 <tr>
                     <th>X좌표</th>
-                    <td></td>
+                    <td><%=wifiDetail.getLongitude()%></td>
                 </tr>
                 <tr>
                     <th>Y좌표</th>
-                    <td></td>
+                    <td><%=wifiDetail.getLatitude()%></td>
                 </tr>
                 <tr>
                     <th>작업일자</th>
-                    <td></td>
+                    <td><%=wifiDetail.getWorkDatetime()%></td>
                 </tr>
             </tbody>
         </table>

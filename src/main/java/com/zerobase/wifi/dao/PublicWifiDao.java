@@ -222,4 +222,61 @@ public class PublicWifiDao extends SQLiteDbConnection {
 
         return nearWifiList;
     }
+
+    public PublicWifiDto selectWifiDetail(String manageNo) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        PublicWifiDto publicWifiDto = new PublicWifiDto();
+        final String sql = " SELECT * FROM public_wifi_info WHERE manage_no = ?; ";
+
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, manageNo);
+
+            resultSet = preparedStatement.executeQuery();
+
+            publicWifiDto.setDistance(0.0);
+            publicWifiDto.setManageNo(resultSet.getString("manage_no"));
+            publicWifiDto.setBorough(resultSet.getString("borough"));
+            publicWifiDto.setWifiName(resultSet.getString("wifi_name"));
+            publicWifiDto.setAddressStreet(resultSet.getString("address_street"));
+            publicWifiDto.setAddressDetail(resultSet.getString("address_detail"));
+            publicWifiDto.setFloor(resultSet.getString("floor"));
+            publicWifiDto.setInstallType(resultSet.getString("install_type"));
+            publicWifiDto.setInstallAgency(resultSet.getString("install_agency"));
+            publicWifiDto.setServiceText(resultSet.getString("service"));
+            publicWifiDto.setNetType(resultSet.getString("net_type"));
+            publicWifiDto.setInstallYear(resultSet.getString("install_year"));
+            publicWifiDto.setInoutDoor(resultSet.getString("inout_door"));
+            publicWifiDto.setWifiConnectionEnv(resultSet.getString("wifi_connection_env"));
+            publicWifiDto.setLongitude(resultSet.getDouble("longitude"));
+            publicWifiDto.setLatitude(resultSet.getDouble("latitude"));
+            publicWifiDto.setWorkDatetime(resultSet.getString("work_datetime"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return publicWifiDto;
+    }
 }
