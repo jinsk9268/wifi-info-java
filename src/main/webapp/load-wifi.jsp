@@ -22,11 +22,11 @@
 
         if (publicWifiDao.selectTotalCount() > 0) {
             publicWifiDao.deleteTotalPublicWifi();
-
-            PublicWifiRequest wifiData = new PublicWifiRequest();
-            dataList = wifiData.generateTotalPublicWifiList();
-            isInsert = publicWifiDao.insertTotalPublicWifiData(dataList);
         }
+
+        PublicWifiRequest wifiData = new PublicWifiRequest();
+        dataList = wifiData.generateTotalPublicWifiList();
+        isInsert = publicWifiDao.insertTotalPublicWifiData(dataList);
     %>
     <% if (isInsert) { %>
         <h1><%=dataList.size()%>개의 WIFI 정보를 정상적으로 저장하였습니다.</h1>
