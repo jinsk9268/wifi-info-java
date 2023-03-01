@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -278,5 +279,47 @@ public class PublicWifiDao extends SQLiteDbConnection {
         }
 
         return publicWifiDto;
+    }
+
+    public boolean updateWifiAddBookmarkGroup(String manageNo, int groupId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isUpdateIdBookmark = false;
+
+        final String sql = " UPDATE public_wifi_info "
+                        + " SET id_bookmark = ? WHERE manage_no = ?; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, groupId);
+            preparedStatement.setObject(2, manageNo);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+
+            isUpdateIdBookmark = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } finally {
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return isUpdateIdBookmark;
     }
 }
