@@ -1,3 +1,5 @@
+<%@ page import="com.zerobase.wifi.dao.PublicWifiDao" %>
+<%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,6 +7,11 @@
     <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        String manageNo = request.getParameter("manage-no");
+        PublicWifiDao publicWifiDao = new PublicWifiDao();
+        Map<String, String> deleteData = publicWifiDao.selectDeleteBookmarkWifi(manageNo);
+    %>
     <h1>북마크 삭제기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -25,19 +32,19 @@
             <tbody>
             <tr>
                 <th>북마크 이름</th>
-                <td></td>
+                <td><%=deleteData.get("bookmarkName")%></td>
             </tr>
             <tr>
                 <th>와이파이명</th>
-                <td></td>
+                <td><%=deleteData.get("wifiName")%></td>
             </tr>
             <tr>
                 <th>등록일자</th>
-                <td></td>
+                <td><%=deleteData.get("registerDatetime")%></td>
             </tr>
             <tr>
                 <td class="td-center" colspan="2">
-                    <a href="bookmark.jsp제">돌아가기</a> |
+                    <a href="bookmark.jsp">돌아가기</a> |
                     <button>삭제</button>
                 </td>
             </tr>
