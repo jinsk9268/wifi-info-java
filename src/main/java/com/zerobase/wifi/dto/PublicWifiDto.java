@@ -20,6 +20,8 @@ public class PublicWifiDto {
     private String workDatetime;
     private Integer idBookmark;
 
+    private String registerDatetimeBookmark;
+
     public double getDistance() {
         return distance;
     }
@@ -162,5 +164,13 @@ public class PublicWifiDto {
 
     public void setIdBookmark(Integer idBookmark) {
         this.idBookmark = idBookmark;
+    }
+
+    public String getRegisterDatetimeBookmark() {
+        return registerDatetimeBookmark;
+    }
+
+    public void setRegisterDatetimeBookmark(String registerDatetimeBookmark) {
+        this.registerDatetimeBookmark = registerDatetimeBookmark;
     }
 }
