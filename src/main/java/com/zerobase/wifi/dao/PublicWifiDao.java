@@ -287,12 +287,13 @@ public class PublicWifiDao extends SQLiteDbConnection {
         boolean isUpdateIdBookmark = false;
 
         final String sql = " UPDATE public_wifi_info "
-                        + " SET id_bookmark = ? WHERE manage_no = ?; ";
+                        + " SET id_bookmark = ?, register_datetime_bookmark = ? WHERE manage_no = ?; ";
         try {
             connection = getDbConnection();
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setObject(1, groupId);
-            preparedStatement.setObject(2, manageNo);
+            preparedStatement.setObject(2, LocalDateTime.now());
+            preparedStatement.setObject(3, manageNo);
             preparedStatement.executeUpdate();
 
             connection.commit();
