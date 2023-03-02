@@ -371,4 +371,46 @@ public class PublicWifiDao extends SQLiteDbConnection {
 
         return deleteBookmark;
     }
+
+    public boolean updateBookmarkDataNull(String manageNo) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        boolean isUpdateBookmarkDataNull = false;
+
+        final String sql = " UPDATE public_wifi_info "
+                    + " SET id_bookmark = NULL , register_datetime_bookmark = NULL "
+                    + " WHERE manage_no = ?; ";
+
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, manageNo);
+            preparedStatement.executeUpdate();
+
+            connection.commit();
+            isUpdateBookmarkDataNull = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } finally {
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return isUpdateBookmarkDataNull;
+    }
 }
