@@ -11,7 +11,26 @@
         String manageNo = request.getParameter("manage-no");
         PublicWifiDao publicWifiDao = new PublicWifiDao();
         Map<String, String> deleteData = publicWifiDao.selectDeleteBookmarkWifi(manageNo);
+
+        String deleteManageNo = request.getParameter("delete-id");
+        boolean isClickDeleteButton = deleteManageNo == null;
+
+        boolean isDeleteBookmarkData = false;
+        if (!isClickDeleteButton) {
+            isDeleteBookmarkData = publicWifiDao.updateBookmarkDataNull(deleteManageNo);
+        }
     %>
+    <script>
+        const onClickBookmarkDelete = () => {
+            const url = "bookmark-delete.jsp?delete-id=<%=manageNo%>";
+            window.location.assign(url);
+        }
+
+        if (<%=isDeleteBookmarkData%>) {
+            alert("북마크 정보 삭제에 성공했습니다.");
+            window.location.assign("bookmark.jsp");
+        }
+    </script>
     <h1>북마크 삭제기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -45,7 +64,7 @@
             <tr>
                 <td class="td-center" colspan="2">
                     <a href="bookmark.jsp">돌아가기</a> |
-                    <button>삭제</button>
+                    <button onclick="onClickBookmarkDelete()">삭제</button>
                 </td>
             </tr>
             </tbody>
