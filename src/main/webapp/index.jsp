@@ -11,6 +11,7 @@
 </head>
 <body>
     <%
+        int wifiTotalListCount = new PublicWifiDao().selectTotalCount();
         List<PublicWifiDto> nearWifiList = new ArrayList<>();
 
         String lat = request.getParameter("lat");
@@ -49,12 +50,24 @@
             const url = "?lat="+latitude+"&lnt="+longitude;
             window.location.assign(url);
         }
+
+        const checkDataReload = () => {
+            if ((<%=wifiTotalListCount%>) > 0) {
+                if (window.confirm("db에 데이터가 존재합니다. 데이터를 다시 불러오면 북마크 정보가 초기화됩니다.\n그래도 다시 가져오시겠습니까?")) {
+                    window.location.assign("load-wifi.jsp");
+                } else {
+                    return;
+                }
+            } else {
+                window.location.assign("load-wifi.jsp");
+            }
+        }
     </script>
     <h1>와이파이 정보 구하기</h1>
     <nav>
         <a href="index.jsp">홈</a> |
         <a href="history.jsp">위치 히스토리 목록</a> |
-        <a href="load-wifi.jsp">Open API 와이파이 정보 가져오기</a> |
+        <a href="javascript:void(0)" onclick="checkDataReload()">Open API 와이파이 정보 가져오기</a> |
         <a href="bookmark.jsp">북마크 보기</a> |
         <a href="bookmark-group.jsp">북마크 그룹 관리</a>
     </nav>
