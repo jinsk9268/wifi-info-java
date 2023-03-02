@@ -43,7 +43,10 @@
                             <td><%=data.get("bookmarkName")%></td>
                             <td><%=data.get("wifiName")%></td>
                             <td><%=data.get("registerDatetime")%></td>
-                            <td class="td-center"><a>삭제</a></td>
+                            <td class="td-center">
+                                <a href="bookmark-delete.jsp?manage-no=<%=data.get("manageNo")%>">삭제</a>
+                                <%=data.get("manageNo")%>
+                            </td>
                         </tr>
                     <% } %>
                 <% } %>
