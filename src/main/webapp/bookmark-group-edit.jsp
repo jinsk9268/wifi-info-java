@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>와이파이 정보 구하기</title>
-    <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
+    <link href="style/common.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
     <%

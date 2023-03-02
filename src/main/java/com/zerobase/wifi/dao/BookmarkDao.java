@@ -2,7 +2,6 @@ package com.zerobase.wifi.dao;
 
 import com.zerobase.wifi.db.SQLiteDbConnection;
 import com.zerobase.wifi.dto.BookmarkDto;
-import com.zerobase.wifi.dto.PublicWifiDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,11 +47,11 @@ public class BookmarkDao extends SQLiteDbConnection {
                 if (preparedStatement != null && !preparedStatement.isClosed()) {
                     preparedStatement.close();
                 }
-
-                closeDbConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            closeDbConnection();
         }
 
         return isBookmarkGroupInsert;
@@ -181,11 +180,11 @@ public class BookmarkDao extends SQLiteDbConnection {
                 if (preparedStatement != null && !preparedStatement.isClosed()) {
                     preparedStatement.close();
                 }
-
-                closeDbConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            closeDbConnection();
         }
 
         return isBookmarkGroupUpdate;
@@ -221,6 +220,7 @@ public class BookmarkDao extends SQLiteDbConnection {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             closeDbConnection();
         }
 

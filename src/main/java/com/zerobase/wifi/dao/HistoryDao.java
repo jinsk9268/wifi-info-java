@@ -42,11 +42,11 @@ public class HistoryDao extends SQLiteDbConnection {
                 if (preparedStatement != null && !preparedStatement.isClosed()) {
                     preparedStatement.close();
                 }
-
-                closeDbConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            closeDbConnection();
         }
     }
 
@@ -127,6 +127,7 @@ public class HistoryDao extends SQLiteDbConnection {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             closeDbConnection();
         }
 

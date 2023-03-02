@@ -67,11 +67,11 @@ public class PublicWifiDao extends SQLiteDbConnection {
                 if (preparedStatement != null && !preparedStatement.isClosed()) {
                     preparedStatement.close();
                 }
-
-                closeDbConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            closeDbConnection();
         }
 
         return isTotalDataInsert;
@@ -145,6 +145,7 @@ public class PublicWifiDao extends SQLiteDbConnection {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
             closeDbConnection();
         }
 
