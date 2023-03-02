@@ -35,6 +35,9 @@
         }
 
         const onClickAddBookmarkGroupId = () => {
+            if (selectBookmarkGroupId === "none" || selectBookmarkGroupId === undefined) {
+                return alert("저장할 북마크를 다시 선택해주세요.");
+            }
             const url = "wifi-detail.jsp?manage-no=<%=manageNo%>&group-id=" + selectBookmarkGroupId;
             window.location.assign(url);
         }
