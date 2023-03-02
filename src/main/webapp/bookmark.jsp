@@ -1,3 +1,6 @@
+<%@ page import="com.zerobase.wifi.dao.BookmarkDao" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -5,6 +8,10 @@
     <link href="style/common.css?v=3" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+    <%
+        BookmarkDao bookmarkDao = new BookmarkDao();
+        List<Map> joinList = bookmarkDao.selectBookmarkWithPublicWifi();
+    %>
     <h1>북마크 목록</h1>
     <nav>
         <a href="index.jsp">홈</a> |
@@ -25,16 +32,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="td-require-data" colspan=5>데이터가 존재하지 않습니다.</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="td-center"><a>삭제</a></td>
-                </tr>
+                <% if (joinList.size() == 0) { %>
+                    <tr>
+                        <td class="td-require-data" colspan=5>데이터가 존재하지 않습니다.</td>
+                    </tr>
+                <% } else { %>
+                    <% for (Map data: joinList) { %>
+                        <tr>
+                            <td><%=data.get("id")%></td>
+                            <td><%=data.get("bookmarkName")%></td>
+                            <td><%=data.get("wifiName")%></td>
+                            <td><%=data.get("registerDatetime")%></td>
+                            <td class="td-center"><a>삭제</a></td>
+                        </tr>
+                    <% } %>
+                <% } %>
             </tbody>
         </table>
     </section>
