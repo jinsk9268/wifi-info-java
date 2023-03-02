@@ -234,8 +234,8 @@ public class BookmarkDao extends SQLiteDbConnection {
 
         List<Map> bookmarkWithPublicWifiList = new ArrayList<>();
 
-        final String sql = " SELECT b.id , b.bookmark_name , pwi.wifi_name , pwi.register_datetime_bookmark FROM bookmark b "
-                        + " INNER JOIN public_wifi_info pwi ON b.id = pwi.id_bookmark ORDER BY b.id; ";
+        final String sql = " SELECT b.id , b.bookmark_name , pwi.wifi_name , pwi.register_datetime_bookmark , pwi.manage_no "
+                        + " FROM bookmark b INNER JOIN public_wifi_info pwi ON b.id = pwi.id_bookmark ORDER BY b.id; ";
         try {
             connection = getDbConnection();
             preparedStatement = connection.prepareStatement(sql);
@@ -247,6 +247,7 @@ public class BookmarkDao extends SQLiteDbConnection {
                 joinData.put("bookmarkName", resultSet.getString("bookmark_name"));
                 joinData.put("wifiName", resultSet.getString("wifi_name"));
                 joinData.put("registerDatetime", resultSet.getString("register_datetime_bookmark"));
+                joinData.put("manageNo", resultSet.getString("manage_no"));
 
                 bookmarkWithPublicWifiList.add(joinData);
             }
