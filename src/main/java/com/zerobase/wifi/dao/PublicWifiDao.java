@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PublicWifiDao extends SQLiteDbConnection {
     public boolean insertTotalPublicWifiData(List<PublicWifiDto> list) {
@@ -322,5 +324,51 @@ public class PublicWifiDao extends SQLiteDbConnection {
         }
 
         return isUpdateIdBookmark;
+    }
+
+    public Map<String, String> selectDeleteBookmarkWifi(String manageNo) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        Map<String, String> deleteBookmark = new HashMap<>();
+
+        final String sql = " SELECT b.bookmark_name , pwi.wifi_name , pwi.register_datetime_bookmark "
+                    + " FROM public_wifi_info pwi "
+                    + " INNER JOIN bookmark b ON pwi.id_bookmark = b.id "
+                    + " WHERE pwi.manage_no = ?; ";
+
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, manageNo);
+            resultSet = preparedStatement.executeQuery();
+
+            deleteBookmark.put("bookmarkName", resultSet.getString("bookmark_name"));
+            deleteBookmark.put("wifiName", resultSet.getString("wifi_name"));
+            deleteBookmark.put("registerDatetime", resultSet.getString("register_datetime_bookmark"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return deleteBookmark;
     }
 }
