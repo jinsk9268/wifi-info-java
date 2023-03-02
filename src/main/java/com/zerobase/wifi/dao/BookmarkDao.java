@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BookmarkDao extends SQLiteDbConnection {
     public boolean insertBookmarkGroup(String bookmarkName, int bookmarkOrder) {
@@ -223,5 +225,53 @@ public class BookmarkDao extends SQLiteDbConnection {
         }
 
         return isDeleted;
+    }
+
+    public List<Map> selectBookmarkWithPublicWifi() {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        List<Map> bookmarkWithPublicWifiList = new ArrayList<>();
+
+        final String sql = " SELECT b.id , b.bookmark_name , pwi.wifi_name , pwi.register_datetime_bookmark FROM bookmark b "
+                        + " INNER JOIN public_wifi_info pwi ON b.id = pwi.id_bookmark ORDER BY b.id; ";
+        try {
+            connection = getDbConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Map<String, Object> joinData = new HashMap<>();
+                joinData.put("id", resultSet.getInt("id"));
+                joinData.put("bookmarkName", resultSet.getString("bookmark_name"));
+                joinData.put("wifiName", resultSet.getString("wifi_name"));
+                joinData.put("registerDatetime", resultSet.getString("register_datetime_bookmark"));
+
+                bookmarkWithPublicWifiList.add(joinData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                if (preparedStatement != null && !preparedStatement.isClosed()) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            closeDbConnection();
+        }
+
+        return bookmarkWithPublicWifiList;
     }
 }
